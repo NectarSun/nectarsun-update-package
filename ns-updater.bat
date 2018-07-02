@@ -33,7 +33,7 @@ echo 2 - Power Board
 echo 3 - ESP
 echo 4 - Update ALL
 echo Q - Quit/Return to this Menu
-choice /C 123Q /N /M ""
+choice /C 1234Q /N /M ""
 set board_number=%errorlevel%
 
 if %board_number%==1 goto :main_board_selected
