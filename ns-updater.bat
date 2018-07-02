@@ -17,7 +17,6 @@ echo Power Board version: %pb_version%
 :: Print ESP software version
 call :get_version NS esp_version
 echo ESP version:         %esp_version%
-
 echo.
 ::====================================================
 
@@ -52,7 +51,8 @@ call :print_board_name %board_name%
 
 if defined mb_drive goto :mb_drive_defined
 
-call :select_drive main_board mb_drive
+call :select_drive mb_drive
+call :install_software main_board %mb_drive%
 if errorlevel 10 goto :main_board_selected
 goto :select_board
 exit /b 0
@@ -74,7 +74,8 @@ call :print_board_name %board_name%
 
 if defined pb_drive goto :pb_drive_defined
 
-call :select_drive power_board pb_drive
+call :select_drive pb_drive
+call :install_software power_board %pb_drive%
 if errorlevel 10 goto :power_board_selected
 goto :select_board
 exit /b 0
@@ -180,8 +181,7 @@ if not exist %drive%:\ (
 )
 echo.
 echo [Drive '%drive%:\' selected]
-set %~2=%drive%
-call :install_software %~1 %drive%
+set %~1=%drive%
 exit /b 0
 
 :drive_selected
