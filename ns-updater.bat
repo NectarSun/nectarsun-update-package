@@ -31,6 +31,7 @@ echo *** Select a board to update ***
 echo 1 - Main Board
 echo 2 - Power Board
 echo 3 - ESP
+echo 4 - Update ALL
 echo Q - Quit/Return to this Menu
 choice /C 123Q /N /M ""
 set board_number=%errorlevel%
@@ -38,7 +39,8 @@ set board_number=%errorlevel%
 if %board_number%==1 goto :main_board_selected
 if %board_number%==2 goto :power_board_selected
 if %board_number%==3 goto :esp_selected
-if %board_number%==4 goto :end_program
+if %board_number%==4 goto :all_selected
+if %board_number%==5 goto :end_program
 ::====================================================
 
 
@@ -52,7 +54,8 @@ call :print_board_name %board_name%
 
 if defined mb_drive goto :mb_drive_defined
 
-call :select_drive main_board mb_drive
+call :select_drive mb_drive
+call :install_software main_board %mb_drive%
 if errorlevel 10 goto :main_board_selected
 goto :select_board
 exit /b 0
@@ -74,13 +77,14 @@ call :print_board_name %board_name%
 
 if defined pb_drive goto :pb_drive_defined
 
-call :select_drive power_board pb_drive
+call :select_drive pb_drive
+call :install_software power_board %pb_drive%
 if errorlevel 10 goto :power_board_selected
 goto :select_board
 exit /b 0
 
 :pb_drive_defined
-  call :drive_selected main_board %mb_drive% %board_name%
+  call :drive_selected power_board %pb_drive% %board_name%
   goto :select_board
 exit /b 0
 ::====================================================
@@ -127,6 +131,69 @@ exit /b 0
 
 
 
+:: [STEP 2] All selected
+::====================================================
+:all_selected
+echo.
+echo [Will update all configured boards]
+echo.
+echo Connect the Main Board, Power Board and ESP programmers to the Nectarsun
+echo to update all configured boards in one go.
+echo.
+
+if defined mb_drive echo Main Board programmer connected to:  '%mb_drive%:'
+else echo Main Board programmer connected to:  N/A
+if defined pb_drive echo Power Board programmer connected to: '%pb_drive%:'
+else echo Power Board programmer connected to: N/A
+if defined esp_port echo ESP programmer connected to:         COM%esp_port%
+else echo ESP programmer connected to:         N/A
+
+call :check_same_drives_defined
+if errorlevel 1 (
+  echo.
+  echo [ERROR]
+  echo [Same drive selected for Main board and Power board programmers.]
+  echo [Can't run the 'Update All' option.]
+  echo.
+  echo Select one of the options below:
+  echo 1 - Change drive for Main Board
+  echo 2 - Change drive for Power Board
+  echo Q - Return to Main menu
+  choice /C 12Q /N /M ""
+  echo.
+
+  if errorlevel 1 (
+    echo.
+    echo [Changing drive for Main Board]
+    call :select_drive mb_drive
+  )
+  if errorlevel 2 (
+    echo.
+    echo [Changing drive for Power Board]
+    call :select_drive pb_drive
+  )
+  if errorlevel 3 (
+    goto :select_board
+  )
+)
+
+echo.
+echo Ready to update? Press any key to start updating...
+pause
+
+if defined mb_drive call :install_software main_board %mb_drive%
+if defined pb_drive call :install_software power_board %pb_drive%
+if defined esp_port call :install_esp %esp_port%
+
+echo.
+echo [All done]
+goto :select_board
+
+exit /b 0
+::====================================================
+
+
+
 :: [STEP 3] Install STM software
 ::====================================================
 :install_software
@@ -147,11 +214,11 @@ exit /b %errorlevel%
 ::====================================================
 :install_esp
 tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset write_flash 0x00000 bin\NS-%esp_version%.bin
+echo.
+
 if errorlevel 0 (
-  echo.
   echo [ESP successfully updated]
 ) else (
-  echo.
   echo [ERROR]
   echo [Something went wrong]
 )
@@ -180,8 +247,8 @@ if not exist %drive%:\ (
 )
 echo.
 echo [Drive '%drive%:\' selected]
-set %~2=%drive%
-call :install_software %~1 %drive%
+set %~1=%drive%
+REM call :install_software %~1 %drive%
 exit /b 0
 
 :drive_selected
@@ -189,6 +256,16 @@ echo.
 echo [%~3 is connected to drive '%~2:\']
 echo.
 call :install_software %~1 %~2
+exit /b 0
+
+:check_same_drives_defined
+if defined %mb_drive% (
+  if defined %pb_drive% (
+    if %mb_drive%==%pb_drive% (
+      exit /b 1
+    )
+  )
+)
 exit /b 0
 
 :print_board_name
