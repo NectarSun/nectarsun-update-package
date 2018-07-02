@@ -80,7 +80,7 @@ goto :select_board
 exit /b 0
 
 :pb_drive_defined
-  call :drive_selected main_board %mb_drive% %board_name%
+  call :drive_selected power_board %pb_drive% %board_name%
   goto :select_board
 exit /b 0
 ::====================================================
