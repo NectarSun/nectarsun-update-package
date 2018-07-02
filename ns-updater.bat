@@ -54,12 +54,12 @@ if defined mb_drive goto :mb_drive_defined
 
 call :select_drive main_board mb_drive
 if errorlevel 10 goto :main_board_selected
-goto :install_again
+goto :select_board
 exit /b 0
 
 :mb_drive_defined
   call :drive_selected main_board %mb_drive% %board_name%
-  goto :install_again
+  goto :select_board
 exit /b 0
 ::====================================================
 
@@ -76,12 +76,12 @@ if defined pb_drive goto :pb_drive_defined
 
 call :select_drive power_board pb_drive
 if errorlevel 10 goto :power_board_selected
-goto :install_again
+goto :select_board
 exit /b 0
 
 :pb_drive_defined
   call :drive_selected main_board %mb_drive% %board_name%
-  goto :install_again
+  goto :select_board
 exit /b 0
 ::====================================================
 
@@ -113,7 +113,7 @@ if errorlevel 1 (
 echo.
 echo [COM%esp_port% selected]
 call :install_esp %esp_port%
-goto :install_again
+goto :select_board
 exit /b 0
 
 :esp_port_defined
@@ -121,7 +121,7 @@ exit /b 0
   echo [%board_name% is on COM%esp_port%]
   echo.
   call :install_esp %esp_port%
-  goto :install_again
+  goto :select_board
 exit /b 0
 ::====================================================
 
@@ -157,21 +157,6 @@ if errorlevel 0 (
 )
 exit /b 0
 ::====================================================
-
-
-:: [STEP 4] Install again?
-::====================================================
-:install_again
-choice /C YN /M "Update another board "
-set prompt=%errorlevel%
-if %prompt%==1 (
-  echo.
-  goto :select_board
-)
-goto :end_program
-exit /b 0
-::====================================================
-
 
 
 :: Other functions
