@@ -1,3 +1,4 @@
+![Nectarsun S][nectarsun]
 # Nectarsun Software Updater
 Nectarsun software updater tool for the distributors of the Nectarsun to help maintain up-to-date software on shipped devices. 
 
@@ -114,3 +115,4 @@ Licensed under the Apache 2.0 License.
 [st-link-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-6.png "ST-link pinout"
 [power-port-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-7.png "Power board pinout"
 [shorted-dc]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-8.png "Shorted DC"
+[nectarsun]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/hero-device.png "Nectarsun S"
