@@ -3,28 +3,228 @@ color 0a
 
 :: Welcome message
 ::====================================================
-test&cls
-call :get_version main_board mb_version
-call :get_version power_board pb_version
-call :get_version NS esp_version
-call :print_board_config
+call :get_firmware_versions
+set main_board_configured=0
+set power_board_configured=0
+set esp_configured=0
+call :update_info
+
 ::====================================================
+
+:display_main_menu
+  set "menu_opt="
+  echo  *** Main Menu ***
+  echo  1 - Configure programmers
+  echo  2 - Update software
+  echo  Q - Quit
+  choice /c 12Q /n /m ""
+  set menu_opt=%errorlevel%
+
+  call :update_info
+  if %menu_opt%==1 goto :display_configure_programmers
+  if %menu_opt%==2 goto :display_update_software
+  if %menu_opt%==3 goto :end_program
+exit /b 0
+
+::====================================================
+
+:display_configure_programmers
+  set "menu_opt="
+  echo  *** Configure ***
+  echo  1 - Main board programmer
+  echo  2 - Power board programmer
+  echo  3 - ESP programmer
+  echo  Q - Return to Main menu
+  choice /c 123Q /n /m ""
+  set menu_opt=%errorlevel%
+
+  call :update_info
+  if %menu_opt%==1 goto :configure_main_board
+  if %menu_opt%==2 goto :configure_power_board
+  if %menu_opt%==3 goto :configure_esp
+  if %menu_opt%==4 goto :display_main_menu
+exit /b 0
+
+::====================================================
+
+:display_update_software
+  set "menu_opt="
+  set updating_all=0
+  echo  *** Update Software ***
+  echo  1 - Main board
+  echo  2 - Power board
+  echo  3 - ESP
+  echo  4 - Update ALL
+  echo  Q - Return to Main menu
+  choice /c 1234Q /n /m ""
+  set menu_opt=%errorlevel%
+
+  call :update_info
+  if %menu_opt%==1 goto :update_main_board
+  if %menu_opt%==2 goto :update_power_board
+  if %menu_opt%==3 goto :update_esp
+  if %menu_opt%==4 goto :update_all
+  if %menu_opt%==5 goto :display_main_menu
+exit /b 0
+
+::====================================================
+
+:configure_main_board
+  set "func_return="
+  echo [Select Main board programmer drive]
+  echo.
+  call :select_drive mb_drive
+  set func_return=%errorlevel%
+
+  if %func_return%==10 goto :configure_main_board
+  if %func_return%==11 (
+    call :update_info
+    echo [Main board not configured]
+    echo.
+    goto :display_configure_programmers
+  )
+
+  call :update_info
+  echo [Main board configured]
+  set main_board_configured=1
+  echo.
+  goto :display_configure_programmers
+exit /b 0
+
+::====================================================
+
+:configure_power_board
+  set "func_return="
+  echo [Select Power board programmer drive]
+  echo.
+  call :select_drive pb_drive
+  set func_return=%errorlevel%
+
+  if %func_return%==10 goto :configure_power_board
+  if %func_return%==11 (
+    call :update_info
+    echo [Power board not configured]
+    echo.
+    goto :display_configure_programmers
+  )
+
+  call :update_info
+  echo [Power board configured]
+  set power_board_configured=1
+  echo.
+  goto :display_configure_programmers
+exit /b 0
+
+::====================================================
+
+:configure_esp
+  set "func_return="
+  echo [Select ESP programmer port]
+  echo.
+  call :select_port esp_port
+  set func_return=%errorlevel%
+
+  if %func_return%==10 goto :configure_esp
+  if %func_return%==11 (
+    call :update_info
+    echo [ESP not configured]
+    echo.
+    goto :display_configure_programmers
+  )
+
+  call :update_info
+  echo [ESP configured]
+  set esp_configured=1
+  echo.
+  goto :display_configure_programmers
+exit /b 0
+
+::====================================================
+
+:update_main_board
+  if %main_board_configured%==0 (
+    if %updating_all%==0 call :update_info
+    echo [Main board is not configured]
+    echo.
+    if %updating_all%==1 goto :update_power_board
+    goto :display_update_software
+  )
+
+  call :install_software main_board %mb_drive%
+  if %updating_all%==1 goto :update_power_board
+  goto :display_update_software
+exit /b 0
+
+::====================================================
+
+:update_power_board
+  if %power_board_configured%==0 (
+    if %updating_all%==0 call :update_info
+    echo [Power board is not configured]
+    echo.
+    if %updating_all%==1 goto :update_esp
+    goto :display_update_software
+  )
+
+  call :install_software power_board %pb_drive%
+  if %updating_all%==1 goto :update_esp
+  goto :display_update_software
+exit /b 0
+
+::====================================================
+
+:update_esp
+  if %esp_configured%==0 (
+    if %updating_all%==0 call :update_info
+    echo [ESP port is not configured]
+    echo.
+    if %updating_all%==1 goto :display_update_software
+    goto :display_update_software
+  )
+
+  call :install_esp %esp_port%
+  if %updating_all%==1 goto :display_update_software
+  goto :display_update_software
+exit /b 0
+
+::====================================================
+
+:update_all
+  set updating_all=1
+  echo Connect the Main board, Power board and ESP programmers to the Nectarsun
+  echo to update all configured boards in one go
+  echo.
+
+  if defined mb_drive (
+    if defined pb_drive (
+      if "%mb_drive%"=="%pb_drive%" call :same_drive_defined
+    )
+  )
+
+  REM choice /c YN /m "Ready to update "
+  REM REM call :update_info
+  REM if errorlevel 1 goto :update_main_board
+  goto :update_main_board
+exit /b 0
+
+::====================================================
+
 
 
 :: [STEP 1] user chooses which board to update
 ::====================================================
 :select_board
-  echo *** Select a board to update ***
-  echo 1 - Main Board
-  echo 2 - Power Board
-  echo 3 - ESP
-  echo 4 - Update ALL
-  echo Q - Quit/Return to this Menu
+  echo  *** Select a board to update ***
+  echo   1 - Main Board
+  echo   2 - Power Board
+  echo   3 - ESP
+  echo   4 - Update ALL
+  echo   Q - Quit/Return to this Menu
   choice /C 1234Q /N /M ""
   set board_number=%errorlevel%
 
   test&cls
-  call :print_board_config
+  call :update_info
   if %board_number%==1 goto :main_board_selected
   if %board_number%==2 goto :power_board_selected
   if %board_number%==3 goto :esp_selected
@@ -46,17 +246,17 @@ exit /b 0
   call :select_drive mb_drive
   if errorlevel 11 (
     test&cls
-    call :print_board_config
-    goto :select_board
+    call :update_info
+    goto :select _board
   )
   if errorlevel 10 (
     test&cls
-    call :print_board_config
-    goto :main_board_selected
+    call :update_info
+    goto :main_b oard_selected
   )
   test&cls
-  call :print_board_config
-
+  call :update_info
+ 
   call :install_software main_board %mb_drive%
   goto :select_board
 exit /b 0
@@ -64,8 +264,8 @@ exit /b 0
 :mb_drive_defined
   call :drive_selected main_board %mb_drive% %board_name%
   test&cls
-  call :print_board_config
-  goto :select_board
+  call :update_info
+  goto :select _board
 exit /b 0
 ::====================================================
 
@@ -82,17 +282,17 @@ exit /b 0
   call :select_drive pb_drive
   if errorlevel 11 (
     test&cls
-    call :print_board_config
-    goto :select_board
+    call :update_info
+    goto :select _board
   )
   if errorlevel 10 (
     test&cls
-    call :print_board_config
-    goto :power_board_selected
+    call :update_info
+    goto :power_ board_selected
   )
   test&cls
-  call :print_board_config
-
+  call :update_info
+ 
   call :install_software power_board %pb_drive%
   goto :select_board
 exit /b 0
@@ -121,17 +321,17 @@ exit /b 0
 
     if errorlevel 11 (
       test&cls
-      call :print_board_config
-      goto :select_board
+      call :update_info
+      goto :select _board
     )
     if errorlevel 10 (
       test&cls
-      call :print_board_config
-      goto :update_all_mb_drive
+      call :update_info
+      goto :update _all_mb_drive
     )
     test&cls
-    call :print_board_config
-  )
+    call :update_info
+  ) 
 
 :update_all_pb_drive
   if not defined pb_drive (
@@ -142,17 +342,17 @@ exit /b 0
 
     if errorlevel 11 (
       test&cls
-      call :print_board_config
-      goto :select_board
+      call :update_info
+      goto :select _board
     )
     if errorlevel 10 (
       test&cls
-      call :print_board_config
-      goto :update_all_pb_drive
+      call :update_info
+      goto :update _all_pb_drive
     )
     test&cls
-    call :print_board_config
-  )
+    call :update_info
+  ) 
 
 :update_all_esp_port
   if not defined esp_port (
@@ -163,17 +363,17 @@ exit /b 0
 
     if errorlevel 11 (
       test&cls
-      call :print_board_config
-      goto :select_board
+      call :update_info
+      goto :select _board
     )
     if errorlevel 10 (
       test&cls
-      call :print_board_config
-      goto :update_all_esp_port
+      call :update_info
+      goto :update _all_esp_port
     )
     test&cls
-    call :print_board_config
-  )
+    call :update_info
+  ) 
 
   if defined mb_drive (
     if defined pb_drive (
@@ -184,9 +384,8 @@ exit /b 0
   goto :different_drives_defined
 
 :same_drive_defined
-  test&cls
-  call :print_board_config
-  echo.
+  call :update_info
+  echo. 
   echo [ERROR]
   echo Same drive selected for Main and Power board programmers!
   echo Can't run the 'Update All' option!
@@ -194,39 +393,30 @@ exit /b 0
   echo *** Select one of the options ***
   echo 1 - Change drive for Main board
   echo 2 - Change drive for Power board
-  echo Q - Return to Main menu
-  choice /c 12Q /n /m ""
+  choice /c 12 /n /m ""
 
-  if errorlevel 3 (
-    test&cls
-    call :print_board_config
-    goto :select_board
-  )
   if errorlevel 2 (
-    test&cls
-    call :print_board_config
-    echo.
+    call :update_info
+    echo. 
     echo [Changing drive for Power board]
     call :select_drive pb_drive
-    test&cls
-    call :print_board_config
-  )
+    call :update_info
+  ) 
   if errorlevel 1 (
-    test&cls
-    call :print_board_config
-    echo.
+    call :update_info
+    echo. 
     echo [Changing drive for Main board]
     call :select_drive mb_drive
-    test&cls
-    call :print_board_config
+    call :update_info
   )
+exit /b 0
 
 :different_drives_defined
   echo.
   choice /c YN /m "Ready to update "
   test&cls
-  call :print_board_config
-  if errorlevel 0 goto :select_board
+  call :update_info
+  if errorleve l 0 goto :select_board
 
   if defined mb_drive call :install_software main_board %mb_drive%
   if defined pb_drive call :install_software power_board %pb_drive%
@@ -247,20 +437,20 @@ exit /b 0
 
   call :select_port esp_port
   test&cls
-  call :print_board_config
-  if errorlevel 11 (
+  call :update_info
+  if errorleve l 11 (
     test&cls
-    call :print_board_config
-    goto :select_board
+    call :update_info
+    goto :select _board
   )
   if errorlevel 10 (
     test&cls
-    call :print_board_config
-    goto :esp_selected
+    call :update_info
+    goto :esp_se lected
   )
   test&cls
-  call :print_board_config
-  
+  call :update_info
+   
   call :install_esp %esp_port%
   goto :select_board
 exit /b 0
@@ -311,8 +501,13 @@ exit /b 0
 
 :: Other functions
 ::====================================================
+:get_firmware_versions
+  call :get_version main_board mb_version
+  call :get_version power_board pb_version
+  call :get_version NS esp_version
+exit /b 0
+
 :get_version
-  :: get_version string[filename] string[returned version]
   for %%F in (bin\%~1*.*) do set filename=%%~nF
   set %~2=%filename:~-3%
 exit /b 0
@@ -375,8 +570,9 @@ exit /b 0
   echo.
 exit /b 0
 
-:print_board_config
-  echo *** Nectarsun Software Updater ***
+:update_info
+  test&cls
+  echo  *** Nectarsun Software Updater ***
   echo.
   echo   Board ^| Firmware Version ^| Drive/COM port 
   echo  -------^|------------------^|----------------
@@ -399,8 +595,8 @@ exit /b 0
 exit /b 0
 
 :end_program
+  echo  *** Bye bye ^<3 ***
   echo.
-  echo [Bye bye ^<3]
   echo.
 exit /b %errorlevel%
 ::====================================================
