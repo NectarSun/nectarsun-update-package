@@ -114,5 +114,5 @@ Licensed under the Apache 2.0 License.
 [usb-to-serial-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-5.png "USB-to-Serial pinout"
 [st-link-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-6.png "ST-link pinout"
 [power-port-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-7.png "Power board pinout"
-[shorted-dc]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-8.png "Shorted DC"
+[shorted-dc]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-8.jpg "Shorted DC"
 [nectarsun]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/hero-device.png "Nectarsun S"
