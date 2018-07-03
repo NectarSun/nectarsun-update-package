@@ -94,10 +94,12 @@ Enter the engineering menu:
 5. You can now turn off the Nectarsun, or go to `Settings > Reset > Yes` to boot the Nectarsun in normal mode again.
 6. That's it, you can now connect the DC power from your PV panels, plug the boiler power cable into the Nectarsun and start heating water using the power of the Sun!
 
-## Feedback
+## Feedback & Information
+- More information at [http://www.nectarsun.com](http://www.nectarsun.com)
+- Latest software release notes at [https://nectarsun.github.io](https://nectarsun.github.io)
 - Request a new feature on GitHub.
 - File a bug in GitHub Issues.
-- Email us at [support@nectarsun.com](mailto:support@nectarsun.com) with other feedback.
+- Email us at [support@nectarsun.com](mailto:support@nectarsun.com) with other feedback, or fill in our support form at [http://www.nectarsun.com/support.html](http://www.nectarsun.com/support.html)
 
 ## License
 Copyright (c) Nectarsun. All rights reserved.
