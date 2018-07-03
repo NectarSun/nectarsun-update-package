@@ -107,7 +107,7 @@ Enter the engineering menu:
 - Email us at [support@nectarsun.com](mailto:support@nectarsun.com) with other feedback, or fill in our support form at [http://www.nectarsun.com/support.html](http://www.nectarsun.com/support.html)
 
 ## License
-Copyright (c) Nectarsun. All rights reserved.
+Copyright &copy; Nectarsun. All rights reserved.
 
 Licensed under the Apache 2.0 License.
 
