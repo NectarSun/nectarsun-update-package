@@ -2,7 +2,9 @@
 # Nectarsun Software Updater
 Nectarsun software updater tool for the distributors of the Nectarsun to help maintain up-to-date software on shipped devices. 
 
-Currently this application only runs on Windows. 
+Currently this application only runs on Windows.
+
+>Detailed information on Nectarsun firmware updates and releases at [https://nectarsun.github.io](https://nectarsun.github.io)
 
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
