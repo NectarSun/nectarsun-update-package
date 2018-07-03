@@ -3,14 +3,16 @@ color 0a
 
 :: Welcome message
 ::====================================================
-call :get_firmware_versions
 set main_board_configured=0
 set power_board_configured=0
 set esp_configured=0
+call :get_version main_board mb_version
+call :get_version power_board pb_version
+call :get_version NS esp_version
 call :update_info
 
+:: Main menu
 ::====================================================
-
 :display_main_menu
   set "menu_opt="
   echo  *** Main Menu ***
@@ -26,8 +28,8 @@ call :update_info
   if %menu_opt%==3 goto :end_program
 exit /b 0
 
+:: Configure params menu
 ::====================================================
-
 :display_configure_programmers
   set "menu_opt="
   echo  *** Configure ***
@@ -45,8 +47,8 @@ exit /b 0
   if %menu_opt%==4 goto :display_main_menu
 exit /b 0
 
+:: Update software menu
 ::====================================================
-
 :display_update_software
   set "menu_opt="
   set updating_all=0
@@ -67,8 +69,8 @@ exit /b 0
   if %menu_opt%==5 goto :display_main_menu
 exit /b 0
 
+:: Configure Main board
 ::====================================================
-
 :configure_main_board
   set "func_return="
   echo [Select Main board programmer drive]
@@ -91,8 +93,8 @@ exit /b 0
   goto :display_configure_programmers
 exit /b 0
 
+:: Configure Power board
 ::====================================================
-
 :configure_power_board
   set "func_return="
   echo [Select Power board programmer drive]
@@ -115,8 +117,8 @@ exit /b 0
   goto :display_configure_programmers
 exit /b 0
 
+:: Configure ESP
 ::====================================================
-
 :configure_esp
   set "func_return="
   echo [Select ESP programmer port]
@@ -139,8 +141,8 @@ exit /b 0
   goto :display_configure_programmers
 exit /b 0
 
+:: Update Main board
 ::====================================================
-
 :update_main_board
   if %main_board_configured%==0 (
     if %updating_all%==0 call :update_info
@@ -155,8 +157,8 @@ exit /b 0
   goto :display_update_software
 exit /b 0
 
+:: Update Power board
 ::====================================================
-
 :update_power_board
   if %power_board_configured%==0 (
     if %updating_all%==0 call :update_info
@@ -171,8 +173,8 @@ exit /b 0
   goto :display_update_software
 exit /b 0
 
+:: Update ESP
 ::====================================================
-
 :update_esp
   if %esp_configured%==0 (
     if %updating_all%==0 call :update_info
@@ -187,8 +189,8 @@ exit /b 0
   goto :display_update_software
 exit /b 0
 
+:: Update ALL
 ::====================================================
-
 :update_all
   set "menu_opt="
   set updating_all=1
@@ -209,8 +211,8 @@ exit /b 0
   goto :display_update_software
 exit /b 0
 
+:: Check if same drive defined for MB and PB
 ::====================================================
-
 :same_drive_defined
   call :update_info
   echo. 
@@ -228,19 +230,17 @@ exit /b 0
     echo. 
     echo [Changing drive for Power board]
     call :select_drive pb_drive
-    call :update_info
   ) 
   if errorlevel 1 (
     call :update_info
     echo. 
     echo [Changing drive for Main board]
     call :select_drive mb_drive
-    call :update_info
   )
 exit /b 0
 
+:: Install ST software
 ::====================================================
-
 :install_software
   echo.
   xcopy "bin\%~1*.bin" %~2:\
@@ -257,8 +257,8 @@ exit /b 0
   echo.
 exit /b %errorlevel%
 
+:: Install ESP software
 ::====================================================
-
 :install_esp
   tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset write_flash 0x00000 bin\NS-%esp_version%.bin
   if errorlevel 0 (
@@ -273,23 +273,15 @@ exit /b %errorlevel%
   )
 exit /b 0
 
+:: Get firmware version
 ::====================================================
-
-:get_firmware_versions
-  call :get_version main_board mb_version
-  call :get_version power_board pb_version
-  call :get_version NS esp_version
-exit /b 0
-
-::====================================================
-
 :get_version
   for %%F in (bin\%~1*.*) do set filename=%%~nF
   set %~2=%filename:~-3%
 exit /b 0
 
+:: Select ESP port
 ::====================================================
-
 :select_port
   echo *** Available COM ports ***
   reg query HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\SERIALCOMM | find "REG_SZ" > %temp%\comlist-temp.txt
@@ -314,8 +306,8 @@ exit /b 0
   set %~1=%port%
 exit /b 0
 
+:: Select ST programmer drive
 ::====================================================
-
 :select_drive
   echo *** Available drives ***
   wmic logicaldisk get name, volumename
@@ -337,8 +329,8 @@ exit /b 0
   set %~1=%drive%
 exit /b 0
 
+:: Print info on top of the screen
 ::====================================================
-
 :update_info
   test&cls
   echo  *** Nectarsun Software Updater ***
@@ -363,6 +355,8 @@ exit /b 0
   echo.
 exit /b 0
 
+:: End program
+::====================================================
 :end_program
   echo  *** Bye bye ^<3 ***
   echo.
