@@ -190,6 +190,7 @@ exit /b 0
 ::====================================================
 
 :update_all
+  set "menu_opt="
   set updating_all=1
   echo Connect the Main board, Power board and ESP programmers to the Nectarsun
   echo to update all configured boards in one go
@@ -201,187 +202,14 @@ exit /b 0
     )
   )
 
-  REM choice /c YN /m "Ready to update "
-  REM REM call :update_info
-  REM if errorlevel 1 goto :update_main_board
-  goto :update_main_board
-exit /b 0
-
-::====================================================
-
-
-
-:: [STEP 1] user chooses which board to update
-::====================================================
-:select_board
-  echo  *** Select a board to update ***
-  echo   1 - Main Board
-  echo   2 - Power Board
-  echo   3 - ESP
-  echo   4 - Update ALL
-  echo   Q - Quit/Return to this Menu
-  choice /C 1234Q /N /M ""
-  set board_number=%errorlevel%
-
-  test&cls
+  choice /c YN /m "Ready to update "
+  set menu_opt=%errorlevel%
   call :update_info
-  if %board_number%==1 goto :main_board_selected
-  if %board_number%==2 goto :power_board_selected
-  if %board_number%==3 goto :esp_selected
-  if %board_number%==4 goto :all_selected
-  if %board_number%==5 goto :end_program
-exit /b 0
-::====================================================
-
-
-
-:: [STEP 2] Main Board Selected
-::====================================================
-:main_board_selected
-  if defined mb_drive goto :mb_drive_defined
-
-  echo.
-  echo [Select Main board programmer drive]
-  echo.
-  call :select_drive mb_drive
-  if errorlevel 11 (
-    test&cls
-    call :update_info
-    goto :select _board
-  )
-  if errorlevel 10 (
-    test&cls
-    call :update_info
-    goto :main_b oard_selected
-  )
-  test&cls
-  call :update_info
- 
-  call :install_software main_board %mb_drive%
-  goto :select_board
+  if %menu_opt%==1 goto :update_main_board
+  goto :display_update_software
 exit /b 0
 
-:mb_drive_defined
-  call :drive_selected main_board %mb_drive% %board_name%
-  test&cls
-  call :update_info
-  goto :select _board
-exit /b 0
 ::====================================================
-
-
-
-:: [STEP 2] Power Board Selected
-::====================================================
-:power_board_selected
-  if defined pb_drive goto :pb_drive_defined
-
-  echo.
-  echo [Select Power board programmer drive]
-  echo.
-  call :select_drive pb_drive
-  if errorlevel 11 (
-    test&cls
-    call :update_info
-    goto :select _board
-  )
-  if errorlevel 10 (
-    test&cls
-    call :update_info
-    goto :power_ board_selected
-  )
-  test&cls
-  call :update_info
- 
-  call :install_software power_board %pb_drive%
-  goto :select_board
-exit /b 0
-
-:pb_drive_defined
-  call :drive_selected power_board %pb_drive% %board_name%
-  goto :select_board
-exit /b 0
-::====================================================
-
-
-
-:: [STEP 2] ALL Selected
-::====================================================
-:all_selected
-  echo Connect the Main board, Power board and ESP programmers to the Nectarsun
-  echo to update all configured boards in one go
-  echo.
-
-:update_all_mb_drive
-  if not defined mb_drive (
-    echo.
-    echo [Select Main board programmer drive]
-    echo.
-    call :select_drive mb_drive
-
-    if errorlevel 11 (
-      test&cls
-      call :update_info
-      goto :select _board
-    )
-    if errorlevel 10 (
-      test&cls
-      call :update_info
-      goto :update _all_mb_drive
-    )
-    test&cls
-    call :update_info
-  ) 
-
-:update_all_pb_drive
-  if not defined pb_drive (
-    echo.
-    echo [Select Power board programmer drive]
-    echo.
-    call :select_drive pb_drive
-
-    if errorlevel 11 (
-      test&cls
-      call :update_info
-      goto :select _board
-    )
-    if errorlevel 10 (
-      test&cls
-      call :update_info
-      goto :update _all_pb_drive
-    )
-    test&cls
-    call :update_info
-  ) 
-
-:update_all_esp_port
-  if not defined esp_port (
-    echo.
-    echo [Select ESP programmer COM port]
-    echo.
-    call :select_port esp_port
-
-    if errorlevel 11 (
-      test&cls
-      call :update_info
-      goto :select _board
-    )
-    if errorlevel 10 (
-      test&cls
-      call :update_info
-      goto :update _all_esp_port
-    )
-    test&cls
-    call :update_info
-  ) 
-
-  if defined mb_drive (
-    if defined pb_drive (
-      if "%mb_drive%"=="%pb_drive%" goto :same_drive_defined
-    )
-  )
-
-  goto :different_drives_defined
 
 :same_drive_defined
   call :update_info
@@ -411,106 +239,56 @@ exit /b 0
   )
 exit /b 0
 
-:different_drives_defined
-  echo.
-  choice /c YN /m "Ready to update "
-  test&cls
-  call :update_info
-  if errorleve l 0 goto :select_board
-
-  if defined mb_drive call :install_software main_board %mb_drive%
-  if defined pb_drive call :install_software power_board %pb_drive%
-  if defined esp_port call :install_esp %esp_port%
-
-  echo.
-  echo [All done]
-  goto :select_board
-exit /b 0
 ::====================================================
 
-
-
-:: [STEP 2] ESP Selected
-::====================================================
-:esp_selected
-  if defined esp_port goto :esp_port_defined
-
-  call :select_port esp_port
-  test&cls
-  call :update_info
-  if errorleve l 11 (
-    test&cls
-    call :update_info
-    goto :select _board
-  )
-  if errorlevel 10 (
-    test&cls
-    call :update_info
-    goto :esp_se lected
-  )
-  test&cls
-  call :update_info
-   
-  call :install_esp %esp_port%
-  goto :select_board
-exit /b 0
-
-:esp_port_defined
-  echo.
-  echo [%board_name% is on COM%esp_port%]
-  echo.
-  call :install_esp %esp_port%
-  goto :select_board
-exit /b 0
-::====================================================
-
-
-
-:: [STEP 3] Install STM software
-::====================================================
 :install_software
   echo.
   xcopy "bin\%~1*.bin" %~2:\
   echo.
 
   if errorlevel 0 (
-    REM echo [Binary copied to drive '%~2:\']
+    echo [Binary copied to drive '%~2:\']
+    echo.
     exit /b 0
   )
+  echo.
   echo [ERROR]
   echo [Something went wrong]
+  echo.
 exit /b %errorlevel%
+
 ::====================================================
 
-
-:: [STEP 3] Install ESP software
-::====================================================
 :install_esp
   tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset write_flash 0x00000 bin\NS-%esp_version%.bin
   if errorlevel 0 (
     echo.
     echo [ESP successfully updated]
+    echo.
   ) else (
     echo.
     echo [ERROR]
     echo [Something went wrong]
+    echo.
   )
 exit /b 0
+
 ::====================================================
 
-
-:: Other functions
-::====================================================
 :get_firmware_versions
   call :get_version main_board mb_version
   call :get_version power_board pb_version
   call :get_version NS esp_version
 exit /b 0
 
+::====================================================
+
 :get_version
   for %%F in (bin\%~1*.*) do set filename=%%~nF
   set %~2=%filename:~-3%
 exit /b 0
+
+::====================================================
 
 :select_port
   echo *** Available COM ports ***
@@ -536,6 +314,8 @@ exit /b 0
   set %~1=%port%
 exit /b 0
 
+::====================================================
+
 :select_drive
   echo *** Available drives ***
   wmic logicaldisk get name, volumename
@@ -557,18 +337,7 @@ exit /b 0
   set %~1=%drive%
 exit /b 0
 
-:drive_selected
-  echo.
-  echo [%~3 is connected to drive '%~2:\']
-  echo.
-  call :install_software %~1 %~2
-  exit /b 0
-
-  :print_board_name
-  echo.
-  echo [%~1 selected]
-  echo.
-exit /b 0
+::====================================================
 
 :update_info
   test&cls
@@ -599,4 +368,5 @@ exit /b 0
   echo.
   echo.
 exit /b %errorlevel%
+
 ::====================================================
