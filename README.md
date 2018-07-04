@@ -1,5 +1,10 @@
-![Nectarsun][nectarsun]
-# Nectarsun Software Updater
+<div style="text-align: center;">
+
+  ![Nectarsun][nectarsun]
+
+</div>
+
+# Software Updater
 Nectarsun software updater tool for the distributors of the Nectarsun to help maintain up-to-date software on shipped devices. 
 
 Currently this application only runs on Windows.
