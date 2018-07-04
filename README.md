@@ -16,13 +16,13 @@ To update your Nectarsun, first of all, you will need these tools:
 
 ## Getting started
 1. Download the `nectarsun-updater-package` from this page (select `Clone or download > Download ZIP`), and extract it on your PC.
-1. Install the ST-link and the FTDI drivers from the `drivers` folder. If you're using a different USB-to-Serial converter, you will have to find and install the required drivers yourself. Go to the `Control Panel > Devices and Printers` and check that your drivers installed properly, and both devices show up.
-2. Run the `ns-updater.bat` script. If you get a warning from Windows about an unrecognized app, select `More info > Run anyway`. The next time you run this application Windows won't throw this warning again.
-3. Remove the top cover of the Nectarsun by undoing the two screws:
+2. Install the ST-link and the FTDI drivers from the `drivers` folder. If you're using a different USB-to-Serial converter, you will have to find and install the required drivers yourself. Go to the `Control Panel > Devices and Printers` and check that your drivers installed properly, and both devices show up.
+3. Run the `ns-updater.bat` script. If you get a warning from Windows about an unrecognized app, select `More info > Run anyway`. The next time you run this application Windows won't throw this warning again.
+4. Remove the top cover of the Nectarsun by undoing the two screws:
 
 ![Top cover screws][top-cover-screws]
 
-4. Connect the programmer to one of the programming ports on the Nectarsun (check the section below for detailed instructions), and follow the instructions on the updater script.
+5. Connect the programmer to one of the programming ports on the Nectarsun (check the section below for detailed instructions), and follow the instructions on the updater script.
 
 >We recommend updating all three boards, as the latest software update has many improvements, especially if your Nectarsun runs software version `v1.06` or below. More information about the latest features and improvements that were added to the Nectarsun's software, please go to [https://nectarsun.github.io](https://nectarsun.github.io).
 
@@ -62,17 +62,17 @@ ST-link programmer pinout:
 ![ST-link programmer pinout][st-link-pinout]
 
 4. When you've connected the programmer to the Nectarsun, turn on the Nectarsun.
-4. In the update script, go to `Configure programmers > Main board programmer` and select the drive that the ST-link programmer shows up as.
-5. Then, go to `Update software > Main board`. The script will start updating the main board.
-6. When it's done programming, you can turn off the Nectarsun and disconnect the programmer from the Nectarsun.
+5. In the update script, go to `Configure programmers > Main board programmer` and select the drive that the ST-link programmer shows up as.
+6. Then, go to `Update software > Main board`. The script will start updating the main board.
+7. When it's done programming, you can turn off the Nectarsun and disconnect the programmer from the Nectarsun.
 
 Your Nectarsun's Main board is up to date.
 
 #### Updating the Power board
 1. Cut off the top half of the Nucleo board (if you haven't done so yet). Make sure that the jumper connectors are removed.
-3. Remove the bottom cover of the Nectarsun by removing the four screws in the corners. This will expose the radiator and the Power board programming port (J4) on the bottom.
-2. Connect the programmer to your PC with the USB cable.
-3. Connect the programmer to the Power board programming port (J4 port) on the Nectarsun using the jumper wires and the reference diagrams below:
+2. Remove the bottom cover of the Nectarsun by removing the four screws in the corners. This will expose the radiator and the Power board programming port (J4) on the bottom.
+3. Connect the programmer to your PC with the USB cable.
+4. Connect the programmer to the Power board programming port (J4 port) on the Nectarsun using the jumper wires and the reference diagrams below:
 
 Power board connector pinout (J4 port):
 
@@ -82,11 +82,11 @@ ST-link programmer pinout:
 
 ![ST-link programmer pinout][st-link-pinout]
 
-4. When you've connected the programmer to the Nectarsun, turn on the Nectarsun.
-4. In the update script, go to `Configure programmers > Power board programmer` and select the drive that the ST-link programmer shows up as.
-5. Then, go to `Update software > Power board`. The script will start updating the power board.
-6. When it's done programming, you can turn off the Nectarsun and disconnect the programmer from the Nectarsun.
-7. You can now put the back cover in place.
+5. When you've connected the programmer to the Nectarsun, turn on the Nectarsun.
+6. In the update script, go to `Configure programmers > Power board programmer` and select the drive that the ST-link programmer shows up as.
+7. Then, go to `Update software > Power board`. The script will start updating the power board.
+8. When it's done programming, you can turn off the Nectarsun and disconnect the programmer from the Nectarsun.
+9. You can now put the back cover in place.
 
 Your Nectarsun's Power board is up to date.
 
