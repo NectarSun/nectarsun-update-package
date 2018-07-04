@@ -1,4 +1,4 @@
-![Nectarsun S][nectarsun]
+![Nectarsun][nectarsun]
 # Nectarsun Software Updater
 Nectarsun software updater tool for the distributors of the Nectarsun to help maintain up-to-date software on shipped devices. 
 
@@ -32,10 +32,14 @@ To update your Nectarsun, first of all, you will need these tools:
 2. Connect the USB-to-Serial converter to the ESP programming port (J17 port) on the Nectarsun using the jumper wires and the diagrams below. Make sure that the the selector on the USB-to-Serial converter is set to `3.3V`!! Connect the `GPIO-0` pin on the J17 port to ground (e.g. `GND` pin on the J11 port).
 
 USB-to-Serial converter pinout:
+
 ![USB-to-Serial][usb-to-serial-pinout]
 
 ESP pinout (J17 port):
+
 ![ESP pinout][esp-pinout]
+
+>Please note that the `GPIO-0` pin on J17 port connects to the `GND` pin on the J11 port (or it can be any other `GND` pin on the board).
 
 3. When you've connected the USB-to-Serial converter to the ESP, turn on the Nectarsun.
 4. In the update script, go to `Configure programmers > ESP programmer` select the COM port that the ESP programmer is connected to.
@@ -50,9 +54,11 @@ Your Nectarsun's ESP module is up to date.
 3. Connect the programmer to the Main board programming port (J11 port) on the Nectarsun using the jumper wires and the reference diagrams below:
 
 Main board connector pinout (J11 port):
+
 ![Main board connector pinout][main-port-pinout]
 
 ST-link programmer pinout:
+
 ![ST-link programmer pinout][st-link-pinout]
 
 4. When you've connected the programmer to the Nectarsun, turn on the Nectarsun.
@@ -69,9 +75,11 @@ Your Nectarsun's Main board is up to date.
 3. Connect the programmer to the Power board programming port (J4 port) on the Nectarsun using the jumper wires and the reference diagrams below:
 
 Power board connector pinout (J4 port):
+
 ![Power board connector pinout][power-port-pinout]
 
 ST-link programmer pinout:
+
 ![ST-link programmer pinout][st-link-pinout]
 
 4. When you've connected the programmer to the Nectarsun, turn on the Nectarsun.
@@ -89,9 +97,11 @@ To calibrate the Nectarsun follow these steps:
 1. While on the `ERROR 232` or the `Select Language` screen press and hold the up and down arrows for a few seconds. You will enter the engineering menu.
 
 Enter the engineering menu:
+
 ![Engineering menu][engineering-menu]
 
 2. Short the DC+ and the DC- inputs:
+
 ![Shorted DC][shorted-dc]
 
 3. Using the arrows navigate to the `Calibrate` screen and select `Yes`.
@@ -119,4 +129,4 @@ Licensed under the Apache 2.0 License.
 [st-link-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-6.png "ST-link pinout"
 [power-port-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-7.png "Power board pinout"
 [shorted-dc]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-8.jpg "Shorted DC"
-[nectarsun]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/hero-device.png "Nectarsun S"
+[nectarsun]: http://nectarsun.com/img/nectar-logo-3.svg "Nectarsun"
