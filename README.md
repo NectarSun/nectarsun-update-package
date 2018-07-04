@@ -26,8 +26,8 @@ To update your Nectarsun, first of all, you will need these tools:
 
 >We recommend updating all three boards, as the latest software update has many improvements, especially if your Nectarsun runs software version `v1.06` or below. More information about the latest features and improvements that were added to the Nectarsun's software, please go to [https://nectarsun.github.io](https://nectarsun.github.io).
 
-## Using
-#### Updating the ESP board
+## Updating
+#### ESP board
 1. Plug the USB-to-Serial converter to your PC.
 2. Connect the USB-to-Serial converter to the ESP programming port (J17 port) on the Nectarsun using the jumper wires and the diagrams below. Make sure that the the selector on the USB-to-Serial converter is set to `3.3V`!! Connect the `GPIO-0` pin on the J17 port to ground (e.g. `GND` pin on the J11 port).
 
@@ -48,7 +48,7 @@ ESP pinout (J17 port):
 
 Your Nectarsun's ESP module is up to date.
 
-#### Updating the Main board
+#### Main board
 1. Cut off the top half of the Nucleo board (if you haven't done so yet). Make sure that the jumper connectors are removed.
 2. Connect the programmer to your PC with the USB cable.
 3. Connect the programmer to the Main board programming port (J11 port) on the Nectarsun using the jumper wires and the reference diagrams below:
@@ -68,7 +68,7 @@ ST-link programmer pinout:
 
 Your Nectarsun's Main board is up to date.
 
-#### Updating the Power board
+#### Power board
 1. Cut off the top half of the Nucleo board (if you haven't done so yet). Make sure that the jumper connectors are removed.
 2. Remove the bottom cover of the Nectarsun by removing the four screws in the corners. This will expose the radiator and the Power board programming port (J4) on the bottom.
 3. Connect the programmer to your PC with the USB cable.
@@ -90,8 +90,10 @@ ST-link programmer pinout:
 
 Your Nectarsun's Power board is up to date.
 
-#### Calibration
+## Calibration
 After updating all the boards and turning on the Nectarsun, you might see the `ERROR 232` message on the screen. This simply means that the Nectarsun needs calibrating.
+
+>More solutions to common problems in our FAQ [Knowledge base](https://nectarsun.freshdesk.com/support/home).
 
 To calibrate the Nectarsun follow these steps:
 1. While on the `ERROR 232` or the `Select Language` screen press and hold the up and down arrows for a few seconds. You will enter the engineering menu.
@@ -112,6 +114,7 @@ Enter the engineering menu:
 ## Feedback & Information
 - More information at [http://www.nectarsun.com](http://www.nectarsun.com)
 - Latest software release notes at [https://nectarsun.github.io](https://nectarsun.github.io)
+- Our FAQ Knowledge base at [https://nectarsun.freshdesk.com/support/home](https://nectarsun.freshdesk.com/support/home)
 - Request a new feature on GitHub.
 - File a bug in GitHub Issues.
 - Email us at [support@nectarsun.com](mailto:support@nectarsun.com) with other feedback, or fill in our support form at [http://www.nectarsun.com/support.html](http://www.nectarsun.com/support.html)
