@@ -52,7 +52,7 @@ GPIO0 -------------------------- GND
 Other pins are not used.
 ```
 
->VERY IMPORTANT! The TX connects to RX and the RX pin connects to TX.
+>VERY IMPORTANT! The TX pin connects to RX and the RX pin connects to TX.
 
 >Please note that the `GPIO-0` pin on J17 port connects to the `GND` pin on the J11 port (or it can be any other `GND` pin on the board).
 
