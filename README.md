@@ -6,7 +6,7 @@ Currently this application only runs on Windows.
 
 >Detailed information on Nectarsun firmware updates and releases at [https://nectarsun.github.io](https://nectarsun.github.io)
 
->If you need help using this tool, contact us at [support@nectarsun.com](mailto:support@nectarsun.com)
+If you need help using this tool, contact us at [support@nectarsun.com](mailto:support@nectarsun.com)
 
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
