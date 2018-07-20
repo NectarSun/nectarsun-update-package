@@ -39,6 +39,8 @@ ESP pinout (J17 port):
 
 ![ESP pinout][esp-pinout]
 
+>VERY IMPORTANT! The TX pin on the USB-to-Serial connects to the RX pin on ESP, and the RX pin on the USB-to-Serial connects to the TX pin. Otherwise the ESP won't program.
+
 >Please note that the `GPIO-0` pin on J17 port connects to the `GND` pin on the J11 port (or it can be any other `GND` pin on the board).
 
 3. When you've connected the USB-to-Serial converter to the ESP, turn on the Nectarsun.
