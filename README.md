@@ -39,7 +39,16 @@ ESP pinout (J17 port):
 
 ![ESP pinout][esp-pinout]
 
->VERY IMPORTANT! The TX pin on the USB-to-Serial connects to the RX pin on ESP, and the RX pin on the USB-to-Serial connects to the TX pin. Otherwise the ESP won't program.
+>VERY IMPORTANT! The TX pin on the USB-to-Serial connects to the RX pin on ESP, and the RX pin on the USB-to-Serial connects to the TX pin, like so:
+
+```
+USB-to-serial         ESP(Nectarsun)
+************************************
+GND   -------------------------- GND
+TX    --------------------------  RX
+RX    --------------------------  TX
+GPIO0 -------------------------- GND
+```
 
 >Please note that the `GPIO-0` pin on J17 port connects to the `GND` pin on the J11 port (or it can be any other `GND` pin on the board).
 
