@@ -6,6 +6,8 @@ Currently this application only runs on Windows.
 
 >Detailed information on Nectarsun firmware updates and releases at [https://nectarsun.github.io](https://nectarsun.github.io)
 
+>If you need help using this tool, contact us at [support@nectarsun.com](mailto:support@nectarsun.com)
+
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
 - Software from this page
@@ -126,6 +128,10 @@ Enter the engineering menu:
 5. You can now turn off the Nectarsun, or go to `Settings > Reset > Yes` to boot the Nectarsun in normal mode again.
 6. That's it, you can now connect the DC power from your PV panels, plug the boiler power cable into the Nectarsun and start heating water using the power of the Sun!
 
+## Other languages
+- If you would like to contribute and translate this page or the update tool to your language, please contact us at [support@nectarsun.com](mailto:support@nectarsun.com) and send us the translated README.md file, or create a pull-request on this project.
+- If you would like to have the Nectarsun menu translated in your language, contact us to arrange the translation.
+
 ## Feedback & Information
 - More information at [http://www.nectarsun.com](http://www.nectarsun.com)
 - Latest software release notes at [https://nectarsun.github.io](https://nectarsun.github.io)
@@ -133,6 +139,10 @@ Enter the engineering menu:
 - Request a new feature on GitHub.
 - File a bug in GitHub Issues.
 - Email us at [support@nectarsun.com](mailto:support@nectarsun.com) with other feedback, or fill in our support form at [http://www.nectarsun.com/support.html](http://www.nectarsun.com/support.html)
+
+## Contacts
+- Nectarsun support: [support@nectarsun.com](mailto:support@nectarsun.com)
+- Nectarsun sales: [sales@nectarsun.com](mailto:sales@nectarsun.com)
 
 ## License
 Copyright &copy; Nectarsun. All rights reserved.
