@@ -263,6 +263,28 @@ exit /b 0
   goto :display_erase_software
 exit /b 0
 
+:: Erase STM boards
+::====================================================
+:erase_stm
+  set "menu_opt="
+  set erasing_all=1
+  echo Connect the Main board and the Power board programmers to the Nectarsun
+  echo to erase only these two processors in one go
+  echo.
+
+  if defined mb_drive (
+    if defined pb_drive (
+      if "%mb_drive%"=="%pb_drive%" call :same_drive_defined
+    )
+  )
+
+  choice /c YN /m "Ready to erase "
+  set menu_opt=%errorlevel%
+  call :update_info
+  if %menu_opt%==1 goto :erase_main_board
+  goto :display_erase_software
+exit /b 0
+
 :: Check if same drive defined for MB and PB
 ::====================================================
 :same_drive_defined
