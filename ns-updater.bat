@@ -233,6 +233,22 @@ exit /b 0
   goto :display_update_software
 exit /b 0
 
+:: Erase Main board
+::====================================================
+:erase_main_board
+  if %main_board_configured%==0 (
+    if %erasing_all%==0 call :update_info
+    echo [Main board is not configured]
+    echo.
+    if %erasing_all%==1 goto :erase_power_board
+    goto :display_erase_software
+  )
+
+  call :install_software empty %mb_drive%
+  if %erasing_all%==1 goto :erase_power_board
+  goto :display_erase_software
+exit /b 0
+
 :: Check if same drive defined for MB and PB
 ::====================================================
 :same_drive_defined
