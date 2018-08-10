@@ -347,6 +347,22 @@ exit /b %errorlevel%
   )
 exit /b 0
 
+:: Erase ESP software
+::====================================================
+:erase_esp_flash
+  tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset erase_flash
+  if errorlevel 0 (
+    echo.
+    echo [ESP successfully updated]
+    echo.
+  ) else (
+    echo.
+    echo [ERROR]
+    echo [Something went wrong]
+    echo.
+  )
+exit /b 0
+
 :: Get firmware version
 ::====================================================
 :get_version
