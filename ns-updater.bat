@@ -18,14 +18,16 @@ call :update_info
   echo  *** Main Menu ***
   echo  1 - Configure programmers
   echo  2 - Update software
+  echo  3 - Erase software
   echo  Q - Quit
-  choice /c 12Q /n /m ""
+  choice /c 123Q /n /m ""
   set menu_opt=%errorlevel%
 
   call :update_info
   if %menu_opt%==1 goto :display_configure_programmers
   if %menu_opt%==2 goto :display_update_software
-  if %menu_opt%==3 goto :end_program
+  if %menu_opt%==3 goto :display_erase_software
+  if %menu_opt%==4 goto :end_program
 exit /b 0
 
 :: Configure params menu
@@ -67,6 +69,26 @@ exit /b 0
   if %menu_opt%==3 goto :update_esp
   if %menu_opt%==4 goto :update_all
   if %menu_opt%==5 goto :display_main_menu
+exit /b 0
+
+:: Erase software menu
+::====================================================
+:display_erase_software
+  set "menu_opt="
+  set erasing_all=0
+  echo  *** Erase Software ***
+  echo  1 - Main board
+  echo  2 - Power board
+  echo  3 - Erase Main & Power board
+  echo  Q - Return to Main menu
+  choice /c 123Q /n /m ""
+  set menu_opt=%errorlevel%
+
+  call :update_info
+  if %menu_opt%==1 goto :erase_main_board
+  if %menu_opt%==2 goto :erase_power_board
+  if %menu_opt%==3 goto :erase_stm
+  if %menu_opt%==4 goto :display_main_menu
 exit /b 0
 
 :: Configure Main board
