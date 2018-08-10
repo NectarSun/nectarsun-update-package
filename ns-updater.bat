@@ -1,5 +1,5 @@
 @echo off
-color 0a
+REM color 0a
 setlocal enabledelayedexpansion
 
 :: Welcome message
