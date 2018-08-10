@@ -7,6 +7,7 @@ setlocal enabledelayedexpansion
 set main_board_configured=0
 set power_board_configured=0
 set esp_configured=0
+set version=1.20
 call :get_version main_board mb_version
 call :get_version power_board pb_version
 call :get_version NS esp_version
@@ -473,7 +474,7 @@ exit /b 0
 ::====================================================
 :update_info
   cls
-  echo  *** Nectarsun Software Updater ***
+  echo  *** Nectarsun Software Updater v%version% ***
   echo.
   echo   Board ^| Firmware Version ^| Probe/COM port 
   echo  -------^|------------------^|----------------
