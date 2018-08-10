@@ -18,14 +18,16 @@ call :update_info
   echo  *** Main Menu ***
   echo  1 - Configure programmers
   echo  2 - Update software
+  echo  3 - Erase software
   echo  Q - Quit
-  choice /c 12Q /n /m ""
+  choice /c 123Q /n /m ""
   set menu_opt=%errorlevel%
 
   call :update_info
   if %menu_opt%==1 goto :display_configure_programmers
   if %menu_opt%==2 goto :display_update_software
-  if %menu_opt%==3 goto :end_program
+  if %menu_opt%==3 goto :display_erase_software
+  if %menu_opt%==4 goto :end_program
 exit /b 0
 
 :: Configure params menu
@@ -66,6 +68,28 @@ exit /b 0
   if %menu_opt%==2 goto :update_power_board
   if %menu_opt%==3 goto :update_esp
   if %menu_opt%==4 goto :update_all
+  if %menu_opt%==5 goto :display_main_menu
+exit /b 0
+
+:: Erase software menu
+::====================================================
+:display_erase_software
+  set "menu_opt="
+  set erasing_all=0
+  echo  *** Erase Software ***
+  echo  1 - Main board
+  echo  2 - Power board
+  echo  3 - ESP
+  echo  4 - Erase ALL
+  echo  Q - Return to Main menu
+  choice /c 1234Q /n /m ""
+  set menu_opt=%errorlevel%
+
+  call :update_info
+  if %menu_opt%==1 goto :erase_main_board
+  if %menu_opt%==2 goto :erase_power_board
+  if %menu_opt%==3 goto :erase_esp
+  if %menu_opt%==4 goto :erase_all
   if %menu_opt%==5 goto :display_main_menu
 exit /b 0
 
@@ -152,7 +176,6 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software empty %mb_drive%
   call :install_software main_board %mb_drive%
   if %updating_all%==1 goto :update_power_board
   goto :display_update_software
@@ -169,7 +192,6 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software empty %pb_drive%
   call :install_software power_board %pb_drive%
   if %updating_all%==1 goto :update_esp
   goto :display_update_software
@@ -211,6 +233,74 @@ exit /b 0
   call :update_info
   if %menu_opt%==1 goto :update_main_board
   goto :display_update_software
+exit /b 0
+
+:: Erase Main board
+::====================================================
+:erase_main_board
+  if %main_board_configured%==0 (
+    if %erasing_all%==0 call :update_info
+    echo [Main board is not configured]
+    echo.
+    if %erasing_all%==1 goto :erase_power_board
+    goto :display_erase_software
+  )
+
+  call :install_software empty %mb_drive%
+  if %erasing_all%==1 goto :erase_power_board
+  goto :display_erase_software
+exit /b 0
+
+:: Erase Power board
+::====================================================
+:erase_power_board
+  if %power_board_configured%==0 (
+    if %erasing_all%==0 call :update_info
+    echo [Power board is not configured]
+    echo.
+    if %erasing_all%==1 goto :erase_esp
+    goto :display_erase_software
+  )
+
+  call :install_software empty %pb_drive%
+  if %erasing_all%==1 goto :erase_esp
+  goto :display_erase_software
+exit /b 0
+
+:: Erase ESP
+::====================================================
+:erase_esp
+  if %esp_configured%==0 (
+    if %updating_all%==0 call :update_info
+    echo [ESP port is not configured]
+    echo.
+    goto :display_erase_software
+  )
+
+  call :erase_esp_flash %esp_port%
+  goto :display_erase_software
+exit /b 0
+
+:: Erase ALL
+::====================================================
+:erase_all
+  set "menu_opt="
+  set erasing_all=1
+  echo Connect the Main board, Power board and ESP programmers to the Nectarsun
+  echo to erase all boards in one go
+  echo.
+
+  if defined mb_drive (
+    if defined pb_drive (
+      if "%mb_drive%"=="%pb_drive%" call :same_drive_defined
+    )
+  )
+
+  choice /c YN /m "Ready to erase "
+  set menu_opt=%errorlevel%
+  call :update_info
+  if %menu_opt%==1 goto :erase_main_board
+  goto :display_erase_software
 exit /b 0
 
 :: Check if same drive defined for MB and PB
@@ -263,6 +353,22 @@ exit /b %errorlevel%
 ::====================================================
 :install_esp
   tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset write_flash 0x00000 bin\NS-%esp_version%.bin
+  if errorlevel 0 (
+    echo.
+    echo [ESP successfully updated]
+    echo.
+  ) else (
+    echo.
+    echo [ERROR]
+    echo [Something went wrong]
+    echo.
+  )
+exit /b 0
+
+:: Erase ESP software
+::====================================================
+:erase_esp_flash
+  tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset erase_flash
   if errorlevel 0 (
     echo.
     echo [ESP successfully updated]
