@@ -337,8 +337,7 @@ exit /b 0
 :install_software
   echo.
   REM xcopy "bin\%~1*.bin" %~2:\
-  tools\st-link.exe -c ID=%~2 -ME
-  tools\st-link.exe -c ID=%~2 -V -P "bin\%~1_%~3.bin" 0x08000000  
+  tools\st-link.exe -c ID=%~2 -ME -V -P "bin\%~1_%~3.bin" 0x08000000  
   echo.
 
   if errorlevel 0 (
