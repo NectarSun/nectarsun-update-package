@@ -1,5 +1,6 @@
 @echo off
 color 0a
+setlocal enabledelayedexpansion
 
 :: Welcome message
 ::====================================================
@@ -452,18 +453,18 @@ exit /b 0
 :: Print info on top of the screen
 ::====================================================
 :update_info
-  test&cls
+  cls
   echo  *** Nectarsun Software Updater ***
   echo.
-  echo   Board ^| Firmware Version ^| Drive/COM port 
+  echo   Board ^| Firmware Version ^| Probe/COM port 
   echo  -------^|------------------^|----------------
   if defined mb_drive (
-    echo   Main  ^| %mb_version%              ^| %mb_drive%:
+    echo   Main  ^| %mb_version%              ^| Probe %mb_drive%
   ) else (
     echo   Main  ^| %mb_version%              ^| N^/A
   )
   if defined pb_drive (
-    echo   Power ^| %pb_version%              ^| %pb_drive%:
+    echo   Power ^| %pb_version%              ^| Probe %pb_drive%
   ) else (
     echo   Power ^| %pb_version%              ^| N^/A
   )
@@ -484,3 +485,4 @@ exit /b 0
 exit /b %errorlevel%
 
 ::====================================================
+endlocal
