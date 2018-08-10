@@ -418,23 +418,35 @@ exit /b 0
 ::====================================================
 :select_drive
   echo *** Available drives ***
-  wmic logicaldisk get name, volumename
+
+  tools\st-link.exe -List | find "SN" > probes.list
+  set /a count=0
+  for /f "tokens=2* delims=: " %%f in (probes.list) do (
+    echo  !count!: ST-Link %%f
+    set /a count+=1
+  )
+  set /a count-=1
+  echo.
+  del probes.list
+
+  REM wmic logicaldisk get name, volumename
   REM echo Q: Return to Main menu
-  set /p "drive=Select drive (c,d,e, etc.) and press 'Enter': "
+  set /p "drive=Select drive (0,1,2, etc.) and press 'Enter': "
   if "%drive%"=="q" (
-    set "drive="
+    set /a "drive="
     exit /b 11  
   )
 
-  if not exist %drive%:\ (
+  if %drive% gtr !count! (
     echo.
     echo [ERROR]
-    echo [Drive does not exist]
+    echo [Probe does not exist]
     exit /b 10
   )
+
   echo.
-  echo [Drive '%drive%:\' selected]
-  set %~1=%drive%
+  echo [Probe %drive% selected]
+  set /a "%~1=%drive%"
 exit /b 0
 
 :: Print info on top of the screen
