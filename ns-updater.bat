@@ -1,5 +1,6 @@
 @echo off
-color 0a
+REM color 0a
+setlocal enabledelayedexpansion
 
 :: Welcome message
 ::====================================================
@@ -176,7 +177,7 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software main_board %mb_drive%
+  call :install_software main_board %mb_drive% %mb_version%
   if %updating_all%==1 goto :update_power_board
   goto :display_update_software
 exit /b 0
@@ -192,7 +193,7 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software power_board %pb_drive%
+  call :install_software power_board %pb_drive% %pb_version%
   if %updating_all%==1 goto :update_esp
   goto :display_update_software
 exit /b 0
@@ -246,7 +247,7 @@ exit /b 0
     goto :display_erase_software
   )
 
-  call :install_software empty %mb_drive%
+  call :erase_st_flash %mb_drive%
   if %erasing_all%==1 goto :erase_power_board
   goto :display_erase_software
 exit /b 0
@@ -262,7 +263,7 @@ exit /b 0
     goto :display_erase_software
   )
 
-  call :install_software empty %pb_drive%
+  call :erase_st_flash %pb_drive%
   if %erasing_all%==1 goto :erase_esp
   goto :display_erase_software
 exit /b 0
@@ -335,11 +336,12 @@ exit /b 0
 ::====================================================
 :install_software
   echo.
-  xcopy "bin\%~1*.bin" %~2:\
+  REM xcopy "bin\%~1*.bin" %~2:\
+  tools\st-link.exe -c ID=%~2 -ME -V -P "bin\%~1_%~3.bin" 0x08000000  
   echo.
 
   if errorlevel 0 (
-    echo [Binary copied to drive '%~2:\']
+    echo [Software updated on 'Probe %~2']
     echo.
     exit /b 0
   )
@@ -348,6 +350,24 @@ exit /b 0
   echo [Something went wrong]
   echo.
 exit /b %errorlevel%
+
+:: Erase ST software
+::====================================================
+:erase_st_flash
+  tools\st-link.exe -c ID=%~1 -ME
+  echo.
+
+  if errorlevel 0 (
+    echo [Flash erased on 'Probe %~1']
+    echo.
+    exit /b 0
+  )
+  echo.
+  echo [ERROR]
+  echo [Something went wrong]
+  echo.
+
+exit /b 0
 
 :: Install ESP software
 ::====================================================
@@ -418,40 +438,52 @@ exit /b 0
 ::====================================================
 :select_drive
   echo *** Available drives ***
-  wmic logicaldisk get name, volumename
+
+  tools\st-link.exe -List | find "SN" > probes.list
+  set /a count=0
+  for /f "tokens=2* delims=: " %%f in (probes.list) do (
+    echo  !count!: ST-Link %%f
+    set /a count+=1
+  )
+  set /a count-=1
+  echo.
+  del probes.list
+
+  REM wmic logicaldisk get name, volumename
   REM echo Q: Return to Main menu
-  set /p "drive=Select drive (c,d,e, etc.) and press 'Enter': "
+  set /p "drive=Select drive (0,1,2, etc.) and press 'Enter': "
   if "%drive%"=="q" (
-    set "drive="
+    set /a "drive="
     exit /b 11  
   )
 
-  if not exist %drive%:\ (
+  if %drive% gtr !count! (
     echo.
     echo [ERROR]
-    echo [Drive does not exist]
+    echo [Probe does not exist]
     exit /b 10
   )
+
   echo.
-  echo [Drive '%drive%:\' selected]
-  set %~1=%drive%
+  echo [Probe %drive% selected]
+  set /a "%~1=%drive%"
 exit /b 0
 
 :: Print info on top of the screen
 ::====================================================
 :update_info
-  test&cls
+  cls
   echo  *** Nectarsun Software Updater ***
   echo.
-  echo   Board ^| Firmware Version ^| Drive/COM port 
+  echo   Board ^| Firmware Version ^| Probe/COM port 
   echo  -------^|------------------^|----------------
   if defined mb_drive (
-    echo   Main  ^| %mb_version%              ^| %mb_drive%:
+    echo   Main  ^| %mb_version%              ^| Probe %mb_drive%
   ) else (
     echo   Main  ^| %mb_version%              ^| N^/A
   )
   if defined pb_drive (
-    echo   Power ^| %pb_version%              ^| %pb_drive%:
+    echo   Power ^| %pb_version%              ^| Probe %pb_drive%
   ) else (
     echo   Power ^| %pb_version%              ^| N^/A
   )
@@ -472,3 +504,4 @@ exit /b 0
 exit /b %errorlevel%
 
 ::====================================================
+endlocal
