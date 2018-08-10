@@ -79,7 +79,7 @@ exit /b 0
   echo  *** Erase Software ***
   echo  1 - Main board
   echo  2 - Power board
-  echo  3 - Erase ESP
+  echo  3 - ESP
   echo  4 - Erase ALL
   echo  Q - Return to Main menu
   choice /c 1234Q /n /m ""
