@@ -247,7 +247,7 @@ exit /b 0
     goto :display_erase_software
   )
 
-  call :install_software empty %mb_drive%
+  call :erase_st_flash %mb_drive%
   if %erasing_all%==1 goto :erase_power_board
   goto :display_erase_software
 exit /b 0
@@ -263,7 +263,7 @@ exit /b 0
     goto :display_erase_software
   )
 
-  call :install_software empty %pb_drive%
+  call :erase_st_flash %pb_drive%
   if %erasing_all%==1 goto :erase_esp
   goto :display_erase_software
 exit /b 0
@@ -349,6 +349,24 @@ exit /b 0
   echo [Something went wrong]
   echo.
 exit /b %errorlevel%
+
+:: Erase ST software
+::====================================================
+:erase_st_flash
+  tools\st-link.exe -c ID=%~1 -ME
+  echo.
+
+  if errorlevel 0 (
+    echo [Flash erased on 'Probe %~1']
+    echo.
+    exit /b 0
+  )
+  echo.
+  echo [ERROR]
+  echo [Something went wrong]
+  echo.
+
+exit /b 0
 
 :: Install ESP software
 ::====================================================
