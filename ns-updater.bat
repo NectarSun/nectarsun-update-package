@@ -152,7 +152,6 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software empty %mb_drive%
   call :install_software main_board %mb_drive%
   if %updating_all%==1 goto :update_power_board
   goto :display_update_software
@@ -169,7 +168,6 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software empty %pb_drive%
   call :install_software power_board %pb_drive%
   if %updating_all%==1 goto :update_esp
   goto :display_update_software
