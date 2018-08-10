@@ -249,6 +249,20 @@ exit /b 0
   goto :display_erase_software
 exit /b 0
 
+:: Erase Power board
+::====================================================
+:erase_power_board
+  if %power_board_configured%==0 (
+    if %erasing_all%==0 call :update_info
+    echo [Power board is not configured]
+    echo.
+    goto :display_erase_software
+  )
+
+  call :install_software empty %pb_drive%
+  goto :display_erase_software
+exit /b 0
+
 :: Check if same drive defined for MB and PB
 ::====================================================
 :same_drive_defined
