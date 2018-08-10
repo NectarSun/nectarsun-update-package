@@ -79,16 +79,18 @@ exit /b 0
   echo  *** Erase Software ***
   echo  1 - Main board
   echo  2 - Power board
-  echo  3 - Erase Main & Power board
+  echo  3 - Erase ESP
+  echo  4 - Erase ALL
   echo  Q - Return to Main menu
-  choice /c 123Q /n /m ""
+  choice /c 1234Q /n /m ""
   set menu_opt=%errorlevel%
 
   call :update_info
   if %menu_opt%==1 goto :erase_main_board
   if %menu_opt%==2 goto :erase_power_board
-  if %menu_opt%==3 goto :erase_stm
-  if %menu_opt%==4 goto :display_main_menu
+  if %menu_opt%==3 goto :erase_esp
+  if %menu_opt%==4 goto :erase_all
+  if %menu_opt%==5 goto :display_main_menu
 exit /b 0
 
 :: Configure Main board
@@ -256,20 +258,36 @@ exit /b 0
     if %erasing_all%==0 call :update_info
     echo [Power board is not configured]
     echo.
+    if %erasing_all%==1 goto :erase_esp
     goto :display_erase_software
   )
 
   call :install_software empty %pb_drive%
+  if %erasing_all%==1 goto :erase_esp
   goto :display_erase_software
 exit /b 0
 
-:: Erase STM boards
+:: Erase ESP
 ::====================================================
-:erase_stm
+:erase_esp
+  if %esp_configured%==0 (
+    if %updating_all%==0 call :update_info
+    echo [ESP port is not configured]
+    echo.
+    goto :display_erase_software
+  )
+
+  call :erase_esp_flash %esp_port%
+  goto :display_erase_software
+exit /b 0
+
+:: Erase ALL
+::====================================================
+:erase_all
   set "menu_opt="
   set erasing_all=1
-  echo Connect the Main board and the Power board programmers to the Nectarsun
-  echo to erase only these two processors in one go
+  echo Connect the Main board, Power board and ESP programmers to the Nectarsun
+  echo to erase all boards in one go
   echo.
 
   if defined mb_drive (
