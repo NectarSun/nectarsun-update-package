@@ -177,7 +177,7 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software main_board %mb_drive%
+  call :install_software main_board %mb_drive% %mb_version%
   if %updating_all%==1 goto :update_power_board
   goto :display_update_software
 exit /b 0
@@ -193,7 +193,7 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software power_board %pb_drive%
+  call :install_software power_board %pb_drive% %pb_version%
   if %updating_all%==1 goto :update_esp
   goto :display_update_software
 exit /b 0
@@ -336,11 +336,13 @@ exit /b 0
 ::====================================================
 :install_software
   echo.
-  xcopy "bin\%~1*.bin" %~2:\
+  REM xcopy "bin\%~1*.bin" %~2:\
+  tools\st-link.exe -c ID=%~2 -ME
+  tools\st-link.exe -c ID=%~2 -V -P "bin\%~1_%~3.bin" 0x08000000  
   echo.
 
   if errorlevel 0 (
-    echo [Binary copied to drive '%~2:\']
+    echo [Software updated on 'Probe %~2']
     echo.
     exit /b 0
   )
