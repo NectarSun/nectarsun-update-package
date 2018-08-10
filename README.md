@@ -4,13 +4,15 @@ Nectarsun software updater tool for the distributors of the Nectarsun to help ma
 
 Currently this application only runs on Windows.
 
+The 'st-link.exe' tool was developed by ST Microelectronics, all rights belong to them. It can be downloaded for free from their website [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
+
 >Detailed information on Nectarsun firmware updates and releases at [https://nectarsun.github.io](https://nectarsun.github.io)
 
 If you need help using this tool, contact us at [support@nectarsun.com](mailto:support@nectarsun.com)
 
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
-- Software from this page
+- Software from this page. We are using the ST-Link-CLI.exe to erase/write the ST processor flash. It is included in our update package with the name 'st-link.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 - An ST-link programmer. We're using the top half of an ST Nucleo board as our programmer: [https://bit.ly/2KuabNp](https://bit.ly/2KuabNp)
 - A USB-to-Serial converter. We're using the one in the link, but any generic USB-to-Serial converter will work: [https://ebay.to/2IS7Ypg](https://ebay.to/2IS7Ypg)
 - Female to female jumper wires. E.g.: [https://bit.ly/2lSrAkc](https://bit.ly/2lSrAkc)

@@ -1,11 +1,13 @@
 @echo off
-color 0a
+REM color 0a
+setlocal enabledelayedexpansion
 
 :: Welcome message
 ::====================================================
 set main_board_configured=0
 set power_board_configured=0
 set esp_configured=0
+set version=1.20
 call :get_version main_board mb_version
 call :get_version power_board pb_version
 call :get_version NS esp_version
@@ -18,14 +20,16 @@ call :update_info
   echo  *** Main Menu ***
   echo  1 - Configure programmers
   echo  2 - Update software
+  echo  3 - Erase software
   echo  Q - Quit
-  choice /c 12Q /n /m ""
+  choice /c 123Q /n /m ""
   set menu_opt=%errorlevel%
 
   call :update_info
   if %menu_opt%==1 goto :display_configure_programmers
   if %menu_opt%==2 goto :display_update_software
-  if %menu_opt%==3 goto :end_program
+  if %menu_opt%==3 goto :display_erase_software
+  if %menu_opt%==4 goto :end_program
 exit /b 0
 
 :: Configure params menu
@@ -66,6 +70,28 @@ exit /b 0
   if %menu_opt%==2 goto :update_power_board
   if %menu_opt%==3 goto :update_esp
   if %menu_opt%==4 goto :update_all
+  if %menu_opt%==5 goto :display_main_menu
+exit /b 0
+
+:: Erase software menu
+::====================================================
+:display_erase_software
+  set "menu_opt="
+  set erasing_all=0
+  echo  *** Erase Software ***
+  echo  1 - Main board
+  echo  2 - Power board
+  echo  3 - ESP
+  echo  4 - Erase ALL
+  echo  Q - Return to Main menu
+  choice /c 1234Q /n /m ""
+  set menu_opt=%errorlevel%
+
+  call :update_info
+  if %menu_opt%==1 goto :erase_main_board
+  if %menu_opt%==2 goto :erase_power_board
+  if %menu_opt%==3 goto :erase_esp
+  if %menu_opt%==4 goto :erase_all
   if %menu_opt%==5 goto :display_main_menu
 exit /b 0
 
@@ -152,8 +178,7 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software empty %mb_drive%
-  call :install_software main_board %mb_drive%
+  call :install_software main_board %mb_drive% %mb_version%
   if %updating_all%==1 goto :update_power_board
   goto :display_update_software
 exit /b 0
@@ -169,8 +194,7 @@ exit /b 0
     goto :display_update_software
   )
 
-  call :install_software empty %pb_drive%
-  call :install_software power_board %pb_drive%
+  call :install_software power_board %pb_drive% %pb_version%
   if %updating_all%==1 goto :update_esp
   goto :display_update_software
 exit /b 0
@@ -213,6 +237,74 @@ exit /b 0
   goto :display_update_software
 exit /b 0
 
+:: Erase Main board
+::====================================================
+:erase_main_board
+  if %main_board_configured%==0 (
+    if %erasing_all%==0 call :update_info
+    echo [Main board is not configured]
+    echo.
+    if %erasing_all%==1 goto :erase_power_board
+    goto :display_erase_software
+  )
+
+  call :erase_st_flash %mb_drive%
+  if %erasing_all%==1 goto :erase_power_board
+  goto :display_erase_software
+exit /b 0
+
+:: Erase Power board
+::====================================================
+:erase_power_board
+  if %power_board_configured%==0 (
+    if %erasing_all%==0 call :update_info
+    echo [Power board is not configured]
+    echo.
+    if %erasing_all%==1 goto :erase_esp
+    goto :display_erase_software
+  )
+
+  call :erase_st_flash %pb_drive%
+  if %erasing_all%==1 goto :erase_esp
+  goto :display_erase_software
+exit /b 0
+
+:: Erase ESP
+::====================================================
+:erase_esp
+  if %esp_configured%==0 (
+    if %updating_all%==0 call :update_info
+    echo [ESP port is not configured]
+    echo.
+    goto :display_erase_software
+  )
+
+  call :erase_esp_flash %esp_port%
+  goto :display_erase_software
+exit /b 0
+
+:: Erase ALL
+::====================================================
+:erase_all
+  set "menu_opt="
+  set erasing_all=1
+  echo Connect the Main board, Power board and ESP programmers to the Nectarsun
+  echo to erase all boards in one go
+  echo.
+
+  if defined mb_drive (
+    if defined pb_drive (
+      if "%mb_drive%"=="%pb_drive%" call :same_drive_defined
+    )
+  )
+
+  choice /c YN /m "Ready to erase "
+  set menu_opt=%errorlevel%
+  call :update_info
+  if %menu_opt%==1 goto :erase_main_board
+  goto :display_erase_software
+exit /b 0
+
 :: Check if same drive defined for MB and PB
 ::====================================================
 :same_drive_defined
@@ -245,11 +337,12 @@ exit /b 0
 ::====================================================
 :install_software
   echo.
-  xcopy "bin\%~1*.bin" %~2:\
+  REM xcopy "bin\%~1*.bin" %~2:\
+  tools\st-link.exe -c ID=%~2 -ME -V -P "bin\%~1_%~3.bin" 0x08000000  
   echo.
 
   if errorlevel 0 (
-    echo [Binary copied to drive '%~2:\']
+    echo [Software updated on 'Probe %~2']
     echo.
     exit /b 0
   )
@@ -259,10 +352,44 @@ exit /b 0
   echo.
 exit /b %errorlevel%
 
+:: Erase ST software
+::====================================================
+:erase_st_flash
+  tools\st-link.exe -c ID=%~1 -ME
+  echo.
+
+  if errorlevel 0 (
+    echo [Flash erased on 'Probe %~1']
+    echo.
+    exit /b 0
+  )
+  echo.
+  echo [ERROR]
+  echo [Something went wrong]
+  echo.
+
+exit /b 0
+
 :: Install ESP software
 ::====================================================
 :install_esp
   tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset write_flash 0x00000 bin\NS-%esp_version%.bin
+  if errorlevel 0 (
+    echo.
+    echo [ESP successfully updated]
+    echo.
+  ) else (
+    echo.
+    echo [ERROR]
+    echo [Something went wrong]
+    echo.
+  )
+exit /b 0
+
+:: Erase ESP software
+::====================================================
+:erase_esp_flash
+  tools\esptool.exe -p COM%~1 -c esp8266 -b 460800 --before default_reset -a hard_reset erase_flash
   if errorlevel 0 (
     echo.
     echo [ESP successfully updated]
@@ -312,40 +439,52 @@ exit /b 0
 ::====================================================
 :select_drive
   echo *** Available drives ***
-  wmic logicaldisk get name, volumename
+
+  tools\st-link.exe -List | find "SN" > probes.list
+  set /a count=0
+  for /f "tokens=2* delims=: " %%f in (probes.list) do (
+    echo  !count!: ST-Link %%f
+    set /a count+=1
+  )
+  set /a count-=1
+  echo.
+  del probes.list
+
+  REM wmic logicaldisk get name, volumename
   REM echo Q: Return to Main menu
-  set /p "drive=Select drive (c,d,e, etc.) and press 'Enter': "
+  set /p "drive=Select drive (0,1,2, etc.) and press 'Enter': "
   if "%drive%"=="q" (
-    set "drive="
+    set /a "drive="
     exit /b 11  
   )
 
-  if not exist %drive%:\ (
+  if %drive% gtr !count! (
     echo.
     echo [ERROR]
-    echo [Drive does not exist]
+    echo [Probe does not exist]
     exit /b 10
   )
+
   echo.
-  echo [Drive '%drive%:\' selected]
-  set %~1=%drive%
+  echo [Probe %drive% selected]
+  set /a "%~1=%drive%"
 exit /b 0
 
 :: Print info on top of the screen
 ::====================================================
 :update_info
-  test&cls
-  echo  *** Nectarsun Software Updater ***
+  cls
+  echo  *** Nectarsun Software Updater v%version% ***
   echo.
-  echo   Board ^| Firmware Version ^| Drive/COM port 
+  echo   Board ^| Firmware Version ^| Probe/COM port 
   echo  -------^|------------------^|----------------
   if defined mb_drive (
-    echo   Main  ^| %mb_version%              ^| %mb_drive%:
+    echo   Main  ^| %mb_version%              ^| Probe %mb_drive%
   ) else (
     echo   Main  ^| %mb_version%              ^| N^/A
   )
   if defined pb_drive (
-    echo   Power ^| %pb_version%              ^| %pb_drive%:
+    echo   Power ^| %pb_version%              ^| Probe %pb_drive%
   ) else (
     echo   Power ^| %pb_version%              ^| N^/A
   )
@@ -366,3 +505,4 @@ exit /b 0
 exit /b %errorlevel%
 
 ::====================================================
+endlocal
