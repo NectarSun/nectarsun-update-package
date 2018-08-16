@@ -12,7 +12,10 @@ If you need help using this tool, contact us at [support@nectarsun.com](mailto:s
 
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
-- Software from this page. We are using the ST-Link-CLI.exe to erase/write the ST processor flash. It is included in our update package with the name 'st-link.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
+- Software from this page. 
+- The ST-Link Utility software. Without it you will get the 'mfc100.dll is missing' error, and the updater will not work. It is included in this package in the 'drivers' folder. It is created by ST Microelectronics, and can be downloaded for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
+![DLL Error][dll-error]
+>We are using the ST-Link-CLI.exe to erase/write the ST processor flash and the ST-Link Utility. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 - An ST-link programmer. We're using the top half of an ST Nucleo board as our programmer: [https://bit.ly/2KuabNp](https://bit.ly/2KuabNp)
 - A USB-to-Serial converter. We're using the one in the link, but any generic USB-to-Serial converter will work: [https://ebay.to/2IS7Ypg](https://ebay.to/2IS7Ypg)
 - Female to female jumper wires. E.g.: [https://bit.ly/2lSrAkc](https://bit.ly/2lSrAkc)
@@ -20,13 +23,14 @@ To update your Nectarsun, first of all, you will need these tools:
 
 ## Getting started
 1. Download the `nectarsun-updater-package` from this page (select `Clone or download > Download ZIP`), and extract it on your PC.
-2. Install the ST-link and the FTDI drivers from the `drivers` folder. If you're using a different USB-to-Serial converter, you will have to find and install the required drivers yourself. Go to the `Control Panel > Devices and Printers` and check that your drivers installed properly, and both devices show up.
-3. Run the `ns-updater.bat` script. If you get a warning from Windows about an unrecognized app, select `More info > Run anyway`. The next time you run this application Windows won't throw this warning again.
-4. Remove the top cover of the Nectarsun by undoing the two screws:
+2. Run the 'st-link-utility-installer.exe'. It will install the ST-Link Utility software on your PC and the necessary ST-link drivers.
+3. Install the FTDI drivers from the `drivers` folder. If you're using a different USB-to-Serial converter, you will have to find and install the required drivers yourself. Go to the `Control Panel > Devices and Printers` and check that your drivers installed properly, and both devices show up.
+4. Run the `ns-updater.bat` script. If you get a warning from Windows about an unrecognized app, select `More info > Run anyway`. The next time you run this application Windows won't throw this warning again.
+5. Remove the top cover of the Nectarsun by undoing the two screws:
 
 ![Top cover screws][top-cover-screws]
 
-5. Connect the programmer to one of the programming ports on the Nectarsun (check the section below for detailed instructions), and follow the instructions on the updater script.
+6. Connect the programmer to one of the programming ports on the Nectarsun (check the section below for detailed instructions), and follow the instructions on the updater script.
 
 >We recommend updating all three boards, as the latest software update has many improvements, especially if your Nectarsun runs software version `v1.06` or below. More information about the latest features and improvements that were added to the Nectarsun's software, please go to [https://nectarsun.github.io](https://nectarsun.github.io).
 
@@ -70,6 +74,7 @@ Your Nectarsun's ESP module is up to date.
 #### Main board
 1. Cut off the top half of the Nucleo board (if you haven't done so yet). Make sure that the jumper connectors are removed.
 2. Connect the programmer to your PC with the USB cable.
+>If your PC can't see the ST programmer, try installing the ST-Link drivers from the 'drivers' folder
 3. Connect the programmer to the Main board programming port (J11 port) on the Nectarsun using the jumper wires and the reference diagrams below:
 
 Main board connector pinout (J11 port):
@@ -91,6 +96,7 @@ Your Nectarsun's Main board is up to date.
 1. Cut off the top half of the Nucleo board (if you haven't done so yet). Make sure that the jumper connectors are removed.
 2. Remove the bottom cover of the Nectarsun by removing the four screws in the corners. This will expose the radiator and the Power board programming port (J4) on the bottom.
 3. Connect the programmer to your PC with the USB cable.
+>If your PC can't see the ST programmer, try installing the ST-Link drivers from the 'drivers' folder
 4. Connect the programmer to the Power board programming port (J4 port) on the Nectarsun using the jumper wires and the reference diagrams below:
 
 Power board connector pinout (J4 port):
@@ -160,3 +166,4 @@ Licensed under the Apache 2.0 License.
 [power-port-pinout]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-7.png "Power board pinout"
 [shorted-dc]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-8.jpg "Shorted DC"
 [nectarsun]: http://nectarsun.com/img/nectar-logo-3.svg "Nectarsun"
+[dll-error]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/dll-error.jpg "dll error"
