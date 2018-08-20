@@ -273,7 +273,7 @@ exit /b 0
 ::====================================================
 :erase_esp
   if %esp_configured%==0 (
-    if %updating_all%==0 call :update_info
+    if %erasing_all%==0 call :update_info
     echo [ESP port is not configured]
     echo.
     goto :display_erase_software
