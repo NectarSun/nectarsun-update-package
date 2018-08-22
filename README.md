@@ -13,13 +13,12 @@ If you need help using this tool, contact us at [support@nectarsun.com](mailto:s
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
 - Latest software release from the "Releases" page: https://github.com/NectarSun/nectarsun-update-package/releases/latest 
-- The ST-Link Utility software. Without it you will get the 'mfc100.dll is missing' error, and the updater will not work. It is included in this package in the 'drivers' folder. It is created by ST Microelectronics, and can be downloaded for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
-![DLL Error][dll-error]
->We are using the ST-Link-CLI.exe to erase/write the ST processor flash and the ST-Link Utility. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 - An ST-link programmer. We're using the top half of an ST Nucleo board as our programmer: [https://bit.ly/2KuabNp](https://bit.ly/2KuabNp)
 - A USB-to-Serial converter. We're using the one in the link, but any generic USB-to-Serial converter will work: [https://ebay.to/2IS7Ypg](https://ebay.to/2IS7Ypg)
 - Female to female jumper wires. E.g.: [https://bit.ly/2lSrAkc](https://bit.ly/2lSrAkc)
 - 2 x mini USB cables to connect the ST-link programmer and the USB-to-Serial converter to your PC
+- The ST-Link Utility software.
+>We are using the ST-Link-CLI.exe to erase/write the ST processor flash and the ST-Link Utility. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 
 ## Getting started
 1. Download the `nectarsun-updater-package` from this page (select `Clone or download > Download ZIP`), and extract it on your PC.
@@ -135,6 +134,11 @@ Enter the engineering menu:
 4. After a moment you will be returned to the main Debug screen where you should see the calibration values on the second line of the screen.
 5. You can now turn off the Nectarsun, or go to `Settings > Reset > Yes` to boot the Nectarsun in normal mode again.
 6. That's it, you can now connect the DC power from your PV panels, plug the boiler power cable into the Nectarsun and start heating water using the power of the Sun!
+
+## Problems with the updater
+![DLL Error][dll-error]
+
+If you encounter the 'mfc100.dll is missing' error, please install the ST-Link Utility from the 'drivers' folder by running the 'st-link-utility-installer.exe'. It is created by ST Microelectronics, and can be downloaded for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 
 ## Other languages
 - If you would like to contribute and translate this page or the update tool to your language, please contact us at [support@nectarsun.com](mailto:support@nectarsun.com) and send us the translated README.md file, or create a pull-request on this project.
