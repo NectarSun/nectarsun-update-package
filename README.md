@@ -12,7 +12,7 @@ If you need help using this tool, contact us at [support@nectarsun.com](mailto:s
 
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
-- Software from this page. 
+- Latest software release from the "Releases" page: https://github.com/NectarSun/nectarsun-update-package/releases/latest 
 - The ST-Link Utility software. Without it you will get the 'mfc100.dll is missing' error, and the updater will not work. It is included in this package in the 'drivers' folder. It is created by ST Microelectronics, and can be downloaded for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 ![DLL Error][dll-error]
 >We are using the ST-Link-CLI.exe to erase/write the ST processor flash and the ST-Link Utility. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
