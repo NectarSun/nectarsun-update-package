@@ -13,7 +13,7 @@ If you need help using this tool, contact us at [support@nectarsun.com](mailto:s
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
 - The ST-Link Utility software.
-- Latest software release from the "Releases" page: https://github.com/NectarSun/nectarsun-update-package/releases/latest 
+- The latest Nectarsun Updater version.
 - An ST-link programmer. We're using the top half of an ST Nucleo board as our programmer: [https://bit.ly/2KuabNp](https://bit.ly/2KuabNp)
 - A USB-to-Serial converter. We're using the one in the link, but any generic USB-to-Serial converter will work: [https://ebay.to/2IS7Ypg](https://ebay.to/2IS7Ypg)
 - Female to female jumper wires. E.g.: [https://bit.ly/2lSrAkc](https://bit.ly/2lSrAkc)
@@ -22,7 +22,7 @@ To update your Nectarsun, first of all, you will need these tools:
 >We are using the ST-Link-CLI.exe to erase/write the ST processor flash and the ST-Link Utility. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 
 ## Getting started
-1. Download the `nectarsun-updater-package` from this page (select `Clone or download > Download ZIP`), and extract it on your PC.
+1. Download the `nectarsun-updater-package` from the "Releases" page: https://github.com/NectarSun/nectarsun-update-package/releases/latest.
 2. Run the 'st-link-utility-installer.exe'. It will install the ST-Link Utility software on your PC and the necessary ST-link drivers.
 3. Install the FTDI drivers from the `drivers` folder. If you're using a different USB-to-Serial converter, you will have to find and install the required drivers yourself. Go to the `Control Panel > Devices and Printers` and check that your drivers installed properly, and both devices show up.
 4. Run the `ns-updater.bat` script. If you get a warning from Windows about an unrecognized app, select `More info > Run anyway`. The next time you run this application Windows won't throw this warning again.
