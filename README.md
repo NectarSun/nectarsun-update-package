@@ -12,12 +12,13 @@ If you need help using this tool, contact us at [support@nectarsun.com](mailto:s
 
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
+- The ST-Link Utility software.
 - Latest software release from the "Releases" page: https://github.com/NectarSun/nectarsun-update-package/releases/latest 
 - An ST-link programmer. We're using the top half of an ST Nucleo board as our programmer: [https://bit.ly/2KuabNp](https://bit.ly/2KuabNp)
 - A USB-to-Serial converter. We're using the one in the link, but any generic USB-to-Serial converter will work: [https://ebay.to/2IS7Ypg](https://ebay.to/2IS7Ypg)
 - Female to female jumper wires. E.g.: [https://bit.ly/2lSrAkc](https://bit.ly/2lSrAkc)
 - 2 x mini USB cables to connect the ST-link programmer and the USB-to-Serial converter to your PC
-- The ST-Link Utility software.
+
 >We are using the ST-Link-CLI.exe to erase/write the ST processor flash and the ST-Link Utility. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
 
 ## Getting started
