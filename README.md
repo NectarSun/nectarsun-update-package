@@ -12,18 +12,18 @@ If you need help using this tool, contact us at [support@nectarsun.com](mailto:s
 
 ## Tools needed
 To update your Nectarsun, first of all, you will need these tools:
-- The ST-Link Utility software.
 - The latest Nectarsun Updater version.
 - An ST-link programmer. We're using the top half of an ST Nucleo board as our programmer: [https://bit.ly/2KuabNp](https://bit.ly/2KuabNp)
 - A USB-to-Serial converter. We're using the one in the link, but any generic USB-to-Serial converter will work: [https://ebay.to/2IS7Ypg](https://ebay.to/2IS7Ypg)
 - Female to female jumper wires. E.g.: [https://bit.ly/2lSrAkc](https://bit.ly/2lSrAkc)
 - 2 x mini USB cables to connect the ST-link programmer and the USB-to-Serial converter to your PC
 
->We are using the ST-Link-CLI.exe to erase/write the ST processor flash and the ST-Link Utility. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to ST Microelectronics. You can download this tool for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
-
 ## Getting started
-1. Download the `nectarsun-updater-package` from the "Releases" page: https://github.com/NectarSun/nectarsun-update-package/releases/latest.
+1. Download the latest version of our Nectarsun Updater Package from the "Releases" page: https://github.com/NectarSun/nectarsun-update-package/releases/latest.
 2. Run the 'st-link-utility-installer.exe'. It will install the ST-Link Utility software on your PC and the necessary ST-link drivers.
+
+>DISCLAIMER! We are using the ST-Link-CLI.exe and the ST-Link Utility tools to erase/write the ST processor flash memory. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to STMicroelectronics Group. Additionally, you can download these tools for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
+
 3. Install the FTDI drivers from the `drivers` folder. If you're using a different USB-to-Serial converter, you will have to find and install the required drivers yourself. Go to the `Control Panel > Devices and Printers` and check that your drivers installed properly, and both devices show up.
 4. Run the `ns-updater.bat` script. If you get a warning from Windows about an unrecognized app, select `More info > Run anyway`. The next time you run this application Windows won't throw this warning again.
 5. Remove the top cover of the Nectarsun by undoing the two screws:
@@ -158,8 +158,11 @@ If you encounter the 'mfc100.dll is missing' error, please install the ST-Link U
 - Nectarsun sales: [sales@nectarsun.com](mailto:sales@nectarsun.com)
 
 ## License
-Copyright &copy; Nectarsun. All rights reserved.
+ST, BRAM, ZEROPOWER, SNAPHAT, TAGRAM, TIMEKEEPER, W.A.R.P, NOMADIK, Krypto, SmartJ, SmoothDrive, Mozart, PowerMESH, Max247 BiPORT, TIMEKEEPER, TAGRAM, ISOWATT218, ISOWATT220, LightFlash, TO-220FP, ISOTOP, VIPower, OPTIMWATT, Occam, PowerSO-10, PowerSO-20, HEPTAWATT, MULTIWATT, PENTAWATT, Max220, I-Max220, Max247, Tone Pulse, SNUBBERLESS, SnoopTAG, WORD DIALER, CONTINUOUS ARRAY, BCD,CAPHAT, POLYUSE, ST6, ST9 and ST18 are registered trademarks of companies belonging to the STMicroelectronics Group.
 
+We are using the ST-Link-CLI.exe and the ST-Link Utility tools to erase/write the ST processor flash memory. It is included in our update package with the name 'st-link.exe' and 'st-link-utility-installer.exe'. We have not created it, all rights belong to the STMicroelectronics Group. Additionally, you can download these tools for free from [www.st.com](https://www.st.com/en/development-tools/stsw-link004.html).
+
+Copyright &copy; Nectarsun. All rights reserved.
 Licensed under the Apache 2.0 License.
 
 [top-cover-screws]: https://github.com/NectarSun/nectarsun-update-package/raw/master/img/ns-1.png "Top cover screws"
