@@ -405,8 +405,12 @@ exit /b 0
 :: Get firmware version
 ::====================================================
 :get_version
-  for %%F in (bin\%~1*.*) do set filename=%%~nF
-  set %~2=%filename:~-3%
+    for %%F in (bin\%~1*.*) do set filename=%%~nF
+    if %~1 == NS (
+        set "%~2=%filename:~-3%"
+    ) else (
+        set "%~2=%filename:~-8%"
+    )
 exit /b 0
 
 :: Select ESP port
@@ -479,14 +483,14 @@ exit /b 0
   echo   Board ^| Firmware Version ^| Probe/COM port 
   echo  -------^|------------------^|----------------
   if defined mb_drive (
-    echo   Main  ^| %mb_version%              ^| Probe %mb_drive%
+    echo   Main  ^| %mb_version%         ^| Probe %mb_drive%
   ) else (
-    echo   Main  ^| %mb_version%              ^| N^/A
+    echo   Main  ^| %mb_version%         ^| N^/A
   )
   if defined pb_drive (
-    echo   Power ^| %pb_version%              ^| Probe %pb_drive%
+    echo   Power ^| %pb_version%         ^| Probe %pb_drive%
   ) else (
-    echo   Power ^| %pb_version%              ^| N^/A
+    echo   Power ^| %pb_version%         ^| N^/A
   )
   if defined esp_port (
     echo   ESP   ^| %esp_version%              ^| COM%esp_port%
